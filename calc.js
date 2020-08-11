@@ -1,8 +1,8 @@
 const fs = require("fs");
 const readline = require("readline");
-// This may be replaced by tab character.
+const { exit } = require("process");
 const DELIMITER = ',';
-const keys = "ABCDEFGHIJK".split('');
+// const keys = "ABCDEFGHIJK".split('');
 
 main();
 
@@ -53,10 +53,37 @@ function main() {
 function setValuesToJSON(str) {
     let jsonVal = {};
     let values = str.split(DELIMITER);
+    let keys = generateKey(values.length);
     for (let i=0; i<keys.length; i++){
         jsonVal[keys[i]] = values[i];
     }
     return jsonVal;
+}
+
+// Generate Key (A,B,C...X,Y,Z,AA,AB,AC...,AX,AY,AZ,BA,BB,BC...,BX,BY,BZ,...ZX,ZY,ZZ)
+function generateKey(len) {
+    let keys = [];
+    // There are 26 chars in A-Z. Support up to ZZ. (26*26) Return error if there are more characters.
+    if ( len > 26 * 26 ) {
+        // TODO: Consider how to return error. 
+        console.log("ERROR: Too many cells in first row.")
+        exit(1);
+    }
+
+    for (let i=0; i<len; i++) {
+        let num = Math.floor(i / 26);
+        let firstChar = ''
+        if (num === 0) {
+            firstChar = ''
+        } else {
+            firstChar = String.fromCharCode(65+num-1);
+        }
+        let modVal = i % 26;
+        let secondChar = String.fromCharCode(65+modVal);
+        keys.push(firstChar + secondChar);
+    }
+    // console.log(keys);
+    return keys;
 }
 
 // Replace Letters with Numeric values given in the first row.
