@@ -106,12 +106,32 @@ function generateKey(len) {
 // Replace Letters with Numeric values given in the first row.
 function replaceValues(jsonValues, str) { 
     // Loop through jsonValues and get 'key/values'.
+    let keysTwoChars = [];
+    let keysOneChar = [];
     for (var key in jsonValues) {
         if (jsonValues.hasOwnProperty(key)) {
-            // Replace 'Key' alphabet with the corresponding number given in first row.
-            var regularExp = new RegExp(key, 'g');
-            str = str.replace(regularExp, jsonValues[key]);
+            if (key.length === 1) {
+                // key with one character (For example, 'A').
+                keysOneChar.push(key)
+            } else {
+                // key with two characters (For example, 'AX')
+                keysTwoChars.push(key)
+            }
         }
+    }
+    // Replace 'Key' alphabet with the corresponding number given in first row.
+    // First, replace key with two characters (For example, 'AX'). Then, replace key with one character (For example, 'A').
+    // console.log("keysOneChar", keysOneChar);
+    // console.log("keysTwoChars", keysTwoChars);
+    for (let i=0; i<keysTwoChars.length; i++) {
+        let currentKey = keysTwoChars[i];
+        let regularExp = new RegExp(currentKey, 'g');
+        str = str.replace(regularExp, jsonValues[currentKey]);    
+    }
+    for (let i=0; i<keysOneChar.length; i++) {
+        let currentKey = keysOneChar[i];
+        let regularExp = new RegExp(currentKey, 'g');
+        str = str.replace(regularExp, jsonValues[currentKey]);    
     }
     return str;
 }
