@@ -35,7 +35,6 @@ function main() {
             let cell;
             if (validateFormular(cells[i])){
                 cell = replaceValues(jsonValues, cells[i]);
-                // 'eval' performs calculation
                 try {
                     // 'eval' performs calculation
                     result = eval(cell)
