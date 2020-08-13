@@ -76,8 +76,8 @@ function setValuesToJSON(str) {
     let keys = generateKey(values.length);
     for (let i=0; i<keys.length; i++){
         // This will match: '123', '123.456' or '.456'
-        let regExFloatNumber = /\s*[+-]?([0-9]*[.])?[0-9]+\s*/;
-        if (!regExFloatNumber.test(values[i])){
+        let regExFloatNumber = /^[+-]?([0-9]*[.])?[0-9]+$/;
+        if (!regExFloatNumber.test(values[i].trim())){
             errorExit(1, "ERROR: Invalid format in first row.")
         }
         jsonVal[keys[i]] = values[i];
